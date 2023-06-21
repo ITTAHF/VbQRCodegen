@@ -1,0 +1,23 @@
+Private Sub btnQrCode_Click()
+    Dim qrCodeImageBytes() As Byte
+    Dim strQrCodeTestText As String
+
+    strQrCodeTestText = "https://github.com/wqweto/VbQRCodegen"
+    qrCodeImageBytes = QRCodegenConvertToData(QRCodegenBarcode(strQrCodeTestText), 500, 500)
+    
+    ' Save the QR code image to the same directory as the database file
+    Dim dbPath As String
+    Dim qrCodeFilePath As String
+    
+    dbPath = CurrentProject.Path & "\"
+    qrCodeFilePath = dbPath & "QRCodeImage.bmp"
+    
+    ' Save the image bytes to a file using ADODB.Stream
+    Dim stream As Object
+    Set stream = CreateObject("ADODB.Stream")
+    stream.Type = 1 ' Binary data
+    stream.Open
+    stream.Write qrCodeImageBytes
+    stream.SaveToFile qrCodeFilePath, 2 ' Overwrite the file if it already exists
+    stream.Close
+End Sub
